@@ -1,8 +1,8 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: spinnaker-demo-config
-  namespace: default
+  name: showk-config
+  namespace: showk
 data:
   NEW_FEATURE: "true"
 
@@ -11,49 +11,49 @@ data:
 apiVersion: apps/v1beta2
 kind: Deployment
 metadata:
-  name: spinnaker-demo
-  namespace: default
+  name: showk-app
+  namespace: showk
   labels:
     source: demo
     stack: frontend
-    app: spinnaker
+    app: showk-work
 spec:
   replicas: 3
   selector:
     matchLabels:
       source: demo
-      app: spinnaker
+      app: showk-work
   template:
     metadata:
       labels:
         source: demo
-        app: spinnaker
+        app: showk-work
     spec:
       containers:
       - name: primary
-        image: index.docker.io/lwander/spin-kub-v2-demo
+        image: jyoshise/showk-work
         ports:
-        - containerPort: 8000
+        - containerPort: 8080
         readinessProbe:
           httpGet:
             path: /
-            port: 8000
+            port: 8080
         envFrom:
         - configMapRef:
-            name: spinnaker-demo-config
+            name: showk-config
 
 ---
 
 kind: Service
 apiVersion: v1
 metadata:
-  name: spinnaker-demo
-  namespace: default
+  name: showk-app
+  namespace: showk
 spec:
   selector:
     source: demo
-    app: spinnaker
+    app: showk-work
   ports:
   - protocol: TCP
     port: 80
-    targetPort: 8000
+    targetPort: 8080
