@@ -31,7 +31,7 @@ spec:
     spec:
       containers:
       - name: primary
-        image: jyoshise/showk-work
+        image: jyoshise/showk-app
         ports:
         - containerPort: 8080
         readinessProbe:
